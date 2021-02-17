@@ -9,13 +9,11 @@ const cors = require('cors')
 
 
 // using socket io instance instead of http request
-const io = socketio(server , {
-    handlePreflightRequest: (req, res) => {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        next();
+const io = require('socket.io')(server, {
+    cors: {
+      origin: '*',
     }
-} );
+  });
 
 // using middleware 
 app.use(router);
