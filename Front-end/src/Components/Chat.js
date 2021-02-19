@@ -7,6 +7,8 @@ let socket;
 function Chat({location}) {
     const[name, setName] = useState('');
     const[room, setRoom] = useState('');
+    const[message, setMessage] = useState(''); // for single message
+    const[messages, setMessages] = useState([]);  // array of all the messages
     const  ENDPOINT = 'localhost:5000';
     useEffect(()=>{
             
@@ -32,10 +34,35 @@ function Chat({location}) {
             socket.off();
         }
 
-    },[ENDPOINT, location.search])
+    },[ENDPOINT, location.search]);
+ 
+    // 2nd useeffect for handling messages
+    useEffect(()=>{
+        socket.on('message',(message)=>{
+        setMessages(...messages,message);
+        })  
+
+    },[messages]);
+
+    // function for sending messages
+    const sendMessage = (event)=>{
+        setMessages(message);
+        // event.preventDefault();
+        if(message){
+        socket.emit('sendMessage', message ,()=> setMessage(''));
+        }
+    } 
+    console.log(message,"---Messagesarray:",messages);
     return (
-        <div>
-            chat compo
+        <div className="outerComponent">
+           <div className="component">
+            <input 
+               type="text" 
+               value = {message} 
+               onChange={(event)=>setMessage(event.target.value)}
+               onkeypress={event => event.Key === 'Enter' ? sendMessage(event) :null} />
+               
+            </div>           
         </div>
     )
 }
