@@ -22,9 +22,15 @@ app.use(cors());
 // managing the socket that is connected
 io.on('connection',(socket)=>{
     console.log("we have a new connection")
+    
 
+    socket.on('Join',({name, room},callback)=>{
+         console.log(name, room)
+          // callback for error handling
+         callback(); 
+    })
     //when user left
-    socket.on('disconnet',()=>{
+    socket.on('disconnect',()=>{
         console.log("user has left")
     });
 

@@ -18,9 +18,21 @@ function Chat({location}) {
         socket = io(ENDPOINT);
         console.log(socket);
         setName(name);
-        setRoom(room);    
+        setRoom(room);   
+        socket.emit('Join',{name, room},()=>{
+            //  alert("callback called")
+        }); 
 
-    })
+        // return is for unmounting the component
+        
+        return ()=>{
+            // it disconnect when component is unmounted
+            //  socket.emit('disconnect');
+            // it will turn off the connection for the person who joined
+            socket.off();
+        }
+
+    },[ENDPOINT, location.search])
     return (
         <div>
             chat compo

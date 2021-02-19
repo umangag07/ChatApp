@@ -81,7 +81,7 @@ function Join() {
     const[room, setRoom] = useState('');
     console.log(name,room);
     const onHandle = ()=>{
-       window.alert("One or the option is not specified")
+       window.alert("One or the other option is Empty!!!")
     }
     return (
         <>
@@ -93,9 +93,9 @@ function Join() {
                 <JoinComp>
               <InnerComponent>
                  <h1>Join Room</h1>
-                 <input type="text" placeholder="Enter Your Name" id = "Name" value={name} onChange={e=>setName(e.target.value)}/>
-                 <input type="text" placeholder="Enter Room Name" id = "Room" value={room} onChange={e=>setRoom(e.target.value)}/>
-                 <Link onClick={event=> (!name || !room) ? (event.preventDefault(), onHandle()): null} to={`/chat?name=${name}&room=${room}`}><button>Enter</button></Link>
+                 <input type="text" placeholder="Enter Your Name" id = "Name" value={name} onChange={e=>setName(e.target.value)} />
+                 <input type="text" placeholder="Enter Room Name" id = "Room" value={room} onChange={e=>setRoom(e.target.value)} />
+                 <Link onClick={event=> (!name || !room) ? (event.preventDefault(), onHandle()): null}  to={`/chat?name=${name}&room=${room}`}><button>Enter</button></Link>
               </InnerComponent>
               </JoinComp>
             </OuterComponent>
