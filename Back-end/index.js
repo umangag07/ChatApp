@@ -22,12 +22,11 @@ app.use(cors());
 
 // managing the socket that is connected
 io.on('connection',(socket)=>{
-    console.log("we have a new connection");
     
 
     socket.on('Join',({name, room},callback)=>{
-         //console.log(name, room)
-          
+      
+         
          const {error, user} = addUser({id:socket.id, name, room});
 
          if(error){
@@ -44,10 +43,12 @@ io.on('connection',(socket)=>{
          callback();
     })
 
-  socket.on('sendMessage',({message, callback})=>{
+  socket.on('sendMessage',(message, callback)=>{
+      callback();
        const user = getUser(socket.id);
+      //  console.log(user);
        io.to(user.room).emit('message',{user:user.name, text:message});
-       callback(); // to do something on the front end after the message is sent
+        // to do something on the front end after the message is sent
   })
 
     //when user left
