@@ -6,7 +6,8 @@ const app =express()
 const server = http.createServer(app);
 const router = require('./router');
 const cors = require('cors')
-const {addUser, removeUser, getUser, getUserInRoom} = require('./Users')
+const {addUser, removeUser, getUser, getUserInRoom} = require('./Users');
+const { use } = require('./router');
 
 
 // using socket io instance instead of http request
@@ -26,7 +27,7 @@ io.on('connection',(socket)=>{
 
     socket.on('Join',({name, room},callback)=>{
       
-         
+       
          const {error, user} = addUser({id:socket.id, name, room});
 
          if(error){
@@ -34,11 +35,13 @@ io.on('connection',(socket)=>{
          }
          //emitting the message from the admin tjo user that oined
          socket.emit('message', {user:'admin', text:`${user.name} welcome to the room named ${user.room}`})
-         
+        
          // Giving message to everyone in room
          socket.broadcast.to(user.room).emit('message', {user:'admin', text:`${user.name} has joined`})
          // user joining the room
+         io.to(user.room).emit('AllUserInRoom',{room:user.room,users:getUserInRoom(user.room)});
          socket.join(user.room);
+         
 
          callback();
     })
@@ -50,6 +53,8 @@ io.on('connection',(socket)=>{
        io.to(user.room).emit('message',{user:user.name, text:message});
         // to do something on the front end after the message is sent
   })
+
+  
 
     //when user left
     socket.on('disconnect',()=>{
